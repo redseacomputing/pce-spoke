@@ -1,0 +1,6 @@
+github.com/defenseunicorns/go-oscal v0.7.1 h1:L2kUisuGU5q2GbWvhxPQpNTZtOELpqc/tpd2hgE5gck=
+github.com/defenseunicorns/go-oscal v0.7.1/go.mod h1:2VGbt7jOZ8VfcmWg7Mg9m9NKpLtl/LXAqTWDzcH0qms=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/redseacomputing/pce v0.1.0 h1:m1HvWuRigXT2/hAjyVhkE97fgSqhIz0P8WYJFuDfnNM=
+github.com/redseacomputing/pce v0.1.0/go.mod h1:HTivYre+0LOePLdo4oe3ty75AGN0bA5GO5BSazhlkr0=
