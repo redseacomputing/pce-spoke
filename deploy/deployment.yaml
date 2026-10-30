@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pce-spoke-agent
+  namespace: pce-spoke-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: pce-spoke-agent}
+  template:
+    metadata:
+      labels: {app: pce-spoke-agent}
+    spec:
+      serviceAccountName: pce-spoke-hub
+      containers:
+        - name: agent
+          image: ghcr.io/redseacomputing/pce-spoke:latest
+          env:
+            - name: SCAN_INTERVAL
+              value: "1h"
+            - name: HUB_NAMESPACE
+              value: "pce-hub-system"
+            - name: SCAN_SOURCE_NAME
+              value: "spoke-scan-source"
+            - name: KUBESCAPE_FILE
+              value: "/var/lib/pce-spoke/kubescape.json"
+          volumeMounts:
+            - name: scans
+              mountPath: /var/lib/pce-spoke
+      volumes:
+        - name: scans
+          emptyDir: {}
