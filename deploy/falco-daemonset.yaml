@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: falco-spoke-sensor
+  namespace: pce-spoke-system
+spec:
+  selector:
+    matchLabels: {app: falco-spoke-sensor}
+  template:
+    metadata:
+      labels: {app: falco-spoke-sensor}
+    spec:
+      serviceAccountName: pce-spoke-hub
+      containers:
+        - name: falco
+          image: docker.io/falcosecurity/falco:0.40.0
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN", "SYS_RESOURCE", "SYS_PTRACE"]
+          args: ["/usr/bin/falco", "-c", "/etc/falco.d/falco.yaml"]
+          volumeMounts:
+            - {name: falco-config, mountPath: /etc/falco.d}
+            - {name: falco-socket, mountPath: /run/falco}
+            - {name: proc, mountPath: /host/proc, readOnly: true}
+            - {name: boot, mountPath: /boot, readOnly: true}
+            - {name: modules, mountPath: /host/lib/modules, readOnly: true}
+            - {name: usr-src, mountPath: /usr/src, readOnly: true}
+        - name: agent
+          image: ghcr.io/redseacomputing/pce-spoke:latest
+          env:
+            - {name: OSCAL_ENABLED, value: "false"}     # Sidecar: NUR Threat-Schiene
+            - {name: THREAT_ENABLED, value: "true"}
+            - {name: FALCO_SOCKET, value: "unix:///run/falco/falco.sock"}
+            - {name: ACTIVE_WINDOW, value: "15m"}
+            - {name: FLUSH_INTERVAL, value: "1m"}
+            - {name: HUB_NAMESPACE, value: "pce-hub-system"}
+            - {name: THREAT_SOURCE_NAME, value: "threat-source"}
+          volumeMounts:
+            - {name: falco-socket, mountPath: /run/falco}
+      volumes:
+        - {name: falco-config, configMap: {name: falco-config}}
+        - {name: falco-socket, emptyDir: {}}
+        - {name: proc, hostPath: {path: /proc}}
+        - {name: boot, hostPath: {path: /boot}}
+        - {name: modules, hostPath: {path: /lib/modules}}
+        - {name: usr-src, hostPath: {path: /usr/src}}

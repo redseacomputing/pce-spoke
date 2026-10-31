@@ -24,6 +24,10 @@ spec:
               value: "spoke-scan-source"
             - name: KUBESCAPE_FILE
               value: "/var/lib/pce-spoke/kubescape.json"
+            - name: THREAT_ENABLED
+              value: "false"
+            - name: OSCAL_ENABLED
+              value: "true"
           volumeMounts:
             - name: scans
               mountPath: /var/lib/pce-spoke
