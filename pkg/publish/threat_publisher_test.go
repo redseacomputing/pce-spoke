@@ -17,7 +17,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 
 	"github.com/redseacomputing/pce-spoke/pkg/publish"
-	"github.com/redseacomputing/pce-spoke/pkg/threat"
+	threatpkg "github.com/redseacomputing/pce-spoke/pkg/threat"
 )
 
 var _ = Describe("ThreatPublisher Guiding Test", func() {
@@ -28,10 +28,10 @@ var _ = Describe("ThreatPublisher Guiding Test", func() {
 		cancel     context.CancelFunc
 		publisher  *publish.ThreatPublisher
 		hubNS      = "pce-hub-system"
-		threatData = threat.Aggregate{
+		threatData = threatpkg.Aggregate{
 			SchemaVersion:     "1",
 			ActiveThreatCount: 1,
-			Threats: []threat.Threat{
+			Threats: []threatpkg.Summary{
 				{
 					Rule:      "TestRule",
 					Container: "test-container",
